@@ -1,0 +1,9 @@
+    <project>  
+      
+      <modelVersion>4.0.0</modelVersion>  
+      <groupId>java-application</groupId>  
+      <artifactId>my-app</artifactId>  
+      <version>0.0.1</version>  
+      <packaging>jar</packaging>
+      <name>jainsaheb</name>
+    </project>  
