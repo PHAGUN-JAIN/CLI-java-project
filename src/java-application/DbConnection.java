@@ -1,9 +1,8 @@
 
-
 import java.sql.*;
 import java.io.*;
 
-/*=====================================================================================================================*/
+/*====================================================================================================================================*/
 
 interface employee
 {
@@ -23,7 +22,7 @@ class Admin implements employee
 	@Override
 	public void showGuests() {
 		
-		
+		System.out.println("method under construction");
 	}
 
 	@Override
@@ -96,7 +95,7 @@ class Receptionist implements employee
 	}
 	
 }
-/*=====================================================================================================================*/
+/*====================================================================================================================================*/
 
 public class DbConnection 
 {
@@ -137,7 +136,7 @@ public class DbConnection
 				designation = rs.getString(1);
 				System.out.println("    logged in as : " + designation + "\n" + "\n");
 			}
-			
+			rs.close();
 /*-------------------------------------------------------------------------------------------------------------------------------------*/
 			
 			
@@ -149,43 +148,102 @@ public class DbConnection
 			switch(value)
 			{
 			case 1:     
-				System.out.println("u chose1");
-				break;
+
 			case 2:
-			    System.out.println("u chose 2");
-			    break;
+
 			case 3:
-			    System.out.println("u chose 3");
-			    break;
+
 			case 4:
-			    System.out.println("u chose 4");
-			    break;
+
 			case 5:
-			    System.out.println("u chose 5");
-			    break;
+
 			case 6:
-				 System.out.println("u chose 6");
-				 break;
+
 			case 7:
-				System.out.println("u chose 7");
+				System.out.println("\n"+"processing...................");
 				break;
 			default:
 			    System.out.println("NOT A VALID OPTION!");
 			}
 			
 			
+/*-------------------------------------------------------------------------------------------------------------------------------------*/
 			
 			if (designation.equals("admin"))
 			{
-				System.out.println("Welcome"+ name + " (Admin)!");
+				System.out.println("                  Welcome "+ name + " (Admin)!");
 				Admin admin = new Admin();
+				
+				if(value ==1)
+				{
+					admin.showGuests();
+				}
+				else if(value == 2) 
+				{
+					admin.addGuest();
+				}
+				else if(value == 3)
+				{
+					admin.modifyGuest();
+				}
+				else if(value ==4)
+				{
+					admin.checkOutGuest();
+				}
+				else if(value == 5)
+				{
+					System.exit(0);
+				}
+				else if(value == 6)
+				{
+					admin.addEmployee();
+				}
+				else if(value == 7)
+				{
+					admin.removeEmployee();
+				}
+				else 
+				{
+					System.out.println("Unexpected behaviour...");
+				}
 			}
 			else if (designation.equals("receptionist"))
 			{
 				System.out.println("                  Welcome " + name + " !" + "\n" + "\n");
 				Receptionist recp = new Receptionist();
 				
-				
+				if(value ==1)
+				{
+					recp.showGuests();
+				}
+				else if(value == 2) 
+				{
+					recp.addGuest();
+				}
+				else if(value == 3)
+				{
+					recp.modifyGuest();
+				}
+				else if(value ==4)
+				{
+					recp.checkOutGuest();
+				}
+				else if(value == 5)
+				{
+					System.exit(0);
+				}
+				else if(value == 6)
+				{
+					recp.addEmployee();
+				}
+				else if(value == 7)
+				{
+					recp.removeEmployee();
+				}
+				else 
+				{
+					System.out.println("Unexpected behaviour...");
+				}
 			}
 			else 
 			{
@@ -197,11 +255,13 @@ public class DbConnection
 		{
 			System.out.print(e);
 		}
+/*-------------------------------------------------------------------------------------------------------------------------------------*/
 		finally
 		{
 			try 
 			{
 				stmt.close();
+				pstmt.close();
 				con.close();
 			}
 			catch (SQLException e) 
@@ -209,5 +269,8 @@ public class DbConnection
 				e.printStackTrace();
 			}
 		}
+/*-------------------------------------------------------------------------------------------------------------------------------------*/
+
 	}
 }
+/*-------------------------------------------------------------------------------------------------------------------------------------*/
