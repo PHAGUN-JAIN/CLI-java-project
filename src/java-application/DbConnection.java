@@ -1,6 +1,112 @@
 
+
 import java.sql.*;
 import java.io.*;
+/*====================================================================================================================================*/
+
+
+
+
+class Connect
+{
+	void showGuest()
+	{
+		Connection con = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		String query = "SELECT * FROM guests;";
+		try
+		{
+			Class.forName("org.sqlite.JDBC");
+			con = DriverManager.getConnection("jdbc:sqlite:E:/data/database/reg.db");
+			System.out.println("Connection with database Successfull!");
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(query);
+			while(rs.next())
+			{
+				System.out.println(rs.getInt(1) + " " + rs.getString(2) + " " + rs.getInt(3));
+			}
+			
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+		}
+		finally
+		{
+			try
+			{
+				rs.close();
+				stmt.close();
+				con.close();
+			}
+			catch(Exception e)
+			{
+				System.out.println(e);
+			}
+		}
+	}
+
+	void addGuest() {
+		
+		Connection con = null;
+		PreparedStatement pstmt =null;
+
+		try
+		{
+			Class.forName("org.sqlite.JDBC");
+			con = DriverManager.getConnection("jdbc:sqlite:E:/data/database/reg.db");
+			
+			System.out.println("Connection with database Successfull!");
+
+			pstmt = con.prepareStatement("INSERT INTO guests values (?, ?, ?);");
+			
+			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+			
+			System.out.println("id given to guest ");
+			int id = Integer.parseInt(br.readLine());
+			
+			System.out.println("Name of the guest:");
+			String name = br.readLine();
+			
+			System.out.println("Room alloted to the guest: ");
+			int room = Integer.parseInt(br.readLine());
+			
+			pstmt.setInt(1, id);
+			pstmt.setString(2,name);
+			pstmt.setInt(3, room);
+			boolean res = pstmt.execute();
+
+			if(res == true)
+			{
+				System.out.println("Inserted!");
+			}
+			
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+		}
+		finally
+		{
+			try
+			{
+				pstmt.close();
+				con.close();
+			}
+			catch(Exception e)
+			{
+				System.out.println(e);
+			}
+		}
+	}
+
+
+}
+
+
+
+
 
 /*====================================================================================================================================*/
 
@@ -18,16 +124,18 @@ interface employee
 
 class Admin implements employee
 {
-
+	Connect con = new Connect();
 	@Override
 	public void showGuests() {
+				
+		con.showGuest();
 		
-		System.out.println("method under construction");
+//		System.out.println("method under construction");
 	}
 
 	@Override
 	public void addGuest() {
-		
+		con.addGuest();
 		
 	}
 
@@ -59,9 +167,12 @@ class Admin implements employee
 
 class Receptionist implements employee
 {
+	Connect con = new Connect();
 
 	@Override
 	public void showGuests() {
+		
+		con.showGuest();
 		
 		
 	}
@@ -69,7 +180,7 @@ class Receptionist implements employee
 	@Override
 	public void addGuest() {
 		
-		
+		con.addGuest();
 	}
 
 	@Override
@@ -137,6 +248,8 @@ public class DbConnection
 				System.out.println("    logged in as : " + designation + "\n" + "\n");
 			}
 			rs.close();
+			pstmt.close();
+			con.close();
 /*-------------------------------------------------------------------------------------------------------------------------------------*/
 			
 			
@@ -256,19 +369,19 @@ public class DbConnection
 			System.out.print(e);
 		}
 /*-------------------------------------------------------------------------------------------------------------------------------------*/
-		finally
-		{
-			try 
-			{
-				stmt.close();
-				pstmt.close();
-				con.close();
-			}
-			catch (SQLException e) 
-			{
-				e.printStackTrace();
-			}
-		}
+//		finally
+//		{
+//			try 
+//			{
+//				stmt.close();
+//				pstmt.close();
+//				con.close();
+//			}
+//			catch (SQLException e) 
+//			{
+//				e.printStackTrace();
+//			}
+//		}
 /*-------------------------------------------------------------------------------------------------------------------------------------*/
 
 	}
