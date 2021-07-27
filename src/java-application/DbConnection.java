@@ -2,8 +2,113 @@
 
 import java.sql.*;
 import java.io.*;
+/*====================================================================================================================================*/
 
-/*=====================================================================================================================*/
+
+
+
+class Connect
+{
+	void showGuest()
+	{
+		Connection con = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		String query = "SELECT * FROM guests;";
+		try
+		{
+			Class.forName("org.sqlite.JDBC");
+			con = DriverManager.getConnection("jdbc:sqlite:E:/data/database/reg.db");
+			System.out.println("Connection with database Successfull!");
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(query);
+			while(rs.next())
+			{
+				System.out.println(rs.getInt(1) + " " + rs.getString(2) + " " + rs.getInt(3));
+			}
+			
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+		}
+		finally
+		{
+			try
+			{
+				rs.close();
+				stmt.close();
+				con.close();
+			}
+			catch(Exception e)
+			{
+				System.out.println(e);
+			}
+		}
+	}
+
+	void addGuest() {
+		
+		Connection con = null;
+		PreparedStatement pstmt =null;
+
+		try
+		{
+			Class.forName("org.sqlite.JDBC");
+			con = DriverManager.getConnection("jdbc:sqlite:E:/data/database/reg.db");
+			
+			System.out.println("Connection with database Successfull!");
+
+			pstmt = con.prepareStatement("INSERT INTO guests values (?, ?, ?);");
+			
+			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+			
+			System.out.println("id given to guest ");
+			int id = Integer.parseInt(br.readLine());
+			
+			System.out.println("Name of the guest:");
+			String name = br.readLine();
+			
+			System.out.println("Room alloted to the guest: ");
+			int room = Integer.parseInt(br.readLine());
+			
+			pstmt.setInt(1, id);
+			pstmt.setString(2,name);
+			pstmt.setInt(3, room);
+			boolean res = pstmt.execute();
+
+			if(res == true)
+			{
+				System.out.println("Inserted!");
+			}
+			
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+		}
+		finally
+		{
+			try
+			{
+				pstmt.close();
+				con.close();
+			}
+			catch(Exception e)
+			{
+				System.out.println(e);
+			}
+		}
+	}
+
+
+}
+
+
+
+
+
+/*====================================================================================================================================*/
 
 interface employee
 {
@@ -19,16 +124,18 @@ interface employee
 
 class Admin implements employee
 {
-
+	Connect con = new Connect();
 	@Override
 	public void showGuests() {
+				
+		con.showGuest();
 		
-		
+//		System.out.println("method under construction");
 	}
 
 	@Override
 	public void addGuest() {
-		
+		con.addGuest();
 		
 	}
 
@@ -60,9 +167,12 @@ class Admin implements employee
 
 class Receptionist implements employee
 {
+	Connect con = new Connect();
 
 	@Override
 	public void showGuests() {
+		
+		con.showGuest();
 		
 		
 	}
@@ -70,7 +180,7 @@ class Receptionist implements employee
 	@Override
 	public void addGuest() {
 		
-		
+		con.addGuest();
 	}
 
 	@Override
@@ -96,7 +206,7 @@ class Receptionist implements employee
 	}
 	
 }
-/*=====================================================================================================================*/
+/*====================================================================================================================================*/
 
 public class DbConnection 
 {
@@ -137,7 +247,9 @@ public class DbConnection
 				designation = rs.getString(1);
 				System.out.println("    logged in as : " + designation + "\n" + "\n");
 			}
-			
+			rs.close();
+			pstmt.close();
+			con.close();
 /*-------------------------------------------------------------------------------------------------------------------------------------*/
 			
 			
@@ -149,43 +261,102 @@ public class DbConnection
 			switch(value)
 			{
 			case 1:     
-				System.out.println("u chose1");
-				break;
+
 			case 2:
-			    System.out.println("u chose 2");
-			    break;
+
 			case 3:
-			    System.out.println("u chose 3");
-			    break;
+
 			case 4:
-			    System.out.println("u chose 4");
-			    break;
+
 			case 5:
-			    System.out.println("u chose 5");
-			    break;
+
 			case 6:
-				 System.out.println("u chose 6");
-				 break;
+
 			case 7:
-				System.out.println("u chose 7");
+				System.out.println("\n"+"processing...................");
 				break;
 			default:
 			    System.out.println("NOT A VALID OPTION!");
 			}
 			
 			
+/*-------------------------------------------------------------------------------------------------------------------------------------*/
 			
 			if (designation.equals("admin"))
 			{
-				System.out.println("Welcome"+ name + " (Admin)!");
+				System.out.println("                  Welcome "+ name + " (Admin)!");
 				Admin admin = new Admin();
+				
+				if(value ==1)
+				{
+					admin.showGuests();
+				}
+				else if(value == 2) 
+				{
+					admin.addGuest();
+				}
+				else if(value == 3)
+				{
+					admin.modifyGuest();
+				}
+				else if(value ==4)
+				{
+					admin.checkOutGuest();
+				}
+				else if(value == 5)
+				{
+					System.exit(0);
+				}
+				else if(value == 6)
+				{
+					admin.addEmployee();
+				}
+				else if(value == 7)
+				{
+					admin.removeEmployee();
+				}
+				else 
+				{
+					System.out.println("Unexpected behaviour...");
+				}
 			}
 			else if (designation.equals("receptionist"))
 			{
 				System.out.println("                  Welcome " + name + " !" + "\n" + "\n");
 				Receptionist recp = new Receptionist();
 				
-				
+				if(value ==1)
+				{
+					recp.showGuests();
+				}
+				else if(value == 2) 
+				{
+					recp.addGuest();
+				}
+				else if(value == 3)
+				{
+					recp.modifyGuest();
+				}
+				else if(value ==4)
+				{
+					recp.checkOutGuest();
+				}
+				else if(value == 5)
+				{
+					System.exit(0);
+				}
+				else if(value == 6)
+				{
+					recp.addEmployee();
+				}
+				else if(value == 7)
+				{
+					recp.removeEmployee();
+				}
+				else 
+				{
+					System.out.println("Unexpected behaviour...");
+				}
 			}
 			else 
 			{
@@ -197,17 +368,22 @@ public class DbConnection
 		{
 			System.out.print(e);
 		}
-		finally
-		{
-			try 
-			{
-				stmt.close();
-				con.close();
-			}
-			catch (SQLException e) 
-			{
-				e.printStackTrace();
-			}
-		}
+/*-------------------------------------------------------------------------------------------------------------------------------------*/
+//		finally
+//		{
+//			try 
+//			{
+//				stmt.close();
+//				pstmt.close();
+//				con.close();
+//			}
+//			catch (SQLException e) 
+//			{
+//				e.printStackTrace();
+//			}
+//		}
+/*-------------------------------------------------------------------------------------------------------------------------------------*/
+
 	}
 }
+/*-------------------------------------------------------------------------------------------------------------------------------------*/
