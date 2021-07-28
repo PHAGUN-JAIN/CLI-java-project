@@ -1,5 +1,4 @@
 
-
 import java.sql.*;
 import java.io.*;
 /*====================================================================================================================================*/
@@ -22,9 +21,10 @@ class Connect
 			System.out.println("Connection with database Successfull!");
 			stmt = con.createStatement();
 			rs = stmt.executeQuery(query);
+			System.out.println("  ID   | NAME   | ROOM-NO  | STATUS   ");
 			while(rs.next())
 			{
-				System.out.println(rs.getInt(1) + " " + rs.getString(2) + " " + rs.getInt(3));
+				System.out.println("  " + rs.getInt(1) + "  | " + rs.getString(2) + "  | " + rs.getInt(3) + "  | " + rs.getString(4));
 			}
 			
 		}
@@ -59,7 +59,7 @@ class Connect
 			
 			System.out.println("Connection with database Successfull!");
 
-			pstmt = con.prepareStatement("INSERT INTO guests values (?, ?, ?);");
+			pstmt = con.prepareStatement("INSERT INTO guests values (?, ?, ?,?);");
 			
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			
@@ -75,6 +75,7 @@ class Connect
 			pstmt.setInt(1, id);
 			pstmt.setString(2,name);
 			pstmt.setInt(3, room);
+			pstmt.setString(4, "checkedIn");
 			boolean res = pstmt.execute();
 
 			if(res == true)
@@ -101,7 +102,99 @@ class Connect
 		}
 	}
 
+	void checkOut() {
+		Connection con = null;
 
+		PreparedStatement pstmt =null;
+
+		try
+		{
+			Class.forName("org.sqlite.JDBC");
+			con = DriverManager.getConnection("jdbc:sqlite:E:/data/database/reg.db");
+			System.out.println("Connection with database Successfull!");
+
+			pstmt = con.prepareStatement("UPDATE guests set status =? where room_no=?;");
+			
+			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+			
+			System.out.println("Room alloted to the guest: ");
+			int room = Integer.parseInt(br.readLine());
+			
+			pstmt.setString(1, "checkedOut");
+			pstmt.setInt(2,room);
+
+			pstmt.execute();
+			System.out.println("success!");
+
+			
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+		}
+		finally
+		{
+			try
+			{
+				pstmt.close();
+				con.close();
+			}
+			catch(Exception e)
+			{
+				System.out.println(e);
+			}
+		}
+	}
+
+	void addEmployee() {
+		Connection con = null;
+		PreparedStatement pstmt =null;
+
+		try
+		{
+			Class.forName("org.sqlite.JDBC");
+			con = DriverManager.getConnection("jdbc:sqlite:E:/data/database/reg.db");
+			System.out.println("Connection with database Successfull!");
+
+			pstmt = con.prepareStatement("INSERT INTO employees values (?, ?, ?, ?)");
+			
+			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+			
+			System.out.println("id given to employee ");
+			int id = Integer.parseInt(br.readLine());
+			
+			System.out.println("Name of the employee:");
+			String name = br.readLine();
+			
+			System.out.println("designation alloted to the employee: ");
+			String designation = br.readLine();
+			
+			pstmt.setInt(1, id);
+			pstmt.setString(2,name);
+			pstmt.setString(3, designation);
+			pstmt.setString(4, "default");
+			pstmt.execute();
+			System.out.println("Inserted!");
+
+			
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+		}
+		finally
+		{
+			try
+			{
+				pstmt.close();
+				con.close();
+			}
+			catch(Exception e)
+			{
+				System.out.println(e);
+			}
+		}
+	}
 }
 
 
@@ -141,26 +234,25 @@ class Admin implements employee
 
 	@Override
 	public void modifyGuest() {
-		
+		System.out.println("method under construction");
 		
 	}
 
 	@Override
 	public void checkOutGuest() {
 		
-		
+		con.checkOut();
 	}
 
 	@Override
 	public void addEmployee() {
 		
-		
+		con.addEmployee();
 	}
 
 	@Override
 	public void removeEmployee() {
-		
-		
+		System.out.println("method under construction");
 	}
 	
 }
@@ -173,7 +265,6 @@ class Receptionist implements employee
 	public void showGuests() {
 		
 		con.showGuest();
-		
 		
 	}
 
@@ -192,7 +283,7 @@ class Receptionist implements employee
 	@Override
 	public void checkOutGuest() {
 		
-		
+		con.checkOut();
 	}
 
 	@Override
