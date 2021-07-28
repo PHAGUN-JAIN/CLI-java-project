@@ -11,11 +11,13 @@ on:
   pull_request:
     branches:
     - main
+  release:
+    types: [created]
 
 jobs:
   build:
 
-    runs-on: windows-2019
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
@@ -34,6 +36,7 @@ jobs:
       run: mvn -B package --file pom.xml
 
     - name: Publish to GitHub Packages Apache Maven
-      run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
+  
       env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
+
