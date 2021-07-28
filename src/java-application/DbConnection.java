@@ -1,4 +1,3 @@
-package myPackage;
 
 import java.sql.*;
 import java.io.*;
@@ -124,12 +123,9 @@ class Connect
 			pstmt.setString(1, "checkedOut");
 			pstmt.setInt(2,room);
 
-			boolean res = pstmt.execute();
+			pstmt.execute();
+			System.out.println("success!");
 
-			if(res == true)
-			{
-				System.out.println("Inserted!");
-			}
 			
 		}
 		catch(Exception e)
@@ -150,6 +146,55 @@ class Connect
 		}
 	}
 
+	void addEmployee() {
+		Connection con = null;
+		PreparedStatement pstmt =null;
+
+		try
+		{
+			Class.forName("org.sqlite.JDBC");
+			con = DriverManager.getConnection("jdbc:sqlite:E:/data/database/reg.db");
+			System.out.println("Connection with database Successfull!");
+
+			pstmt = con.prepareStatement("INSERT INTO employees values (?, ?, ?, ?)");
+			
+			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+			
+			System.out.println("id given to employee ");
+			int id = Integer.parseInt(br.readLine());
+			
+			System.out.println("Name of the employee:");
+			String name = br.readLine();
+			
+			System.out.println("designation alloted to the employee: ");
+			String designation = br.readLine();
+			
+			pstmt.setInt(1, id);
+			pstmt.setString(2,name);
+			pstmt.setString(3, designation);
+			pstmt.setString(4, "default");
+			pstmt.execute();
+			System.out.println("Inserted!");
+
+			
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+		}
+		finally
+		{
+			try
+			{
+				pstmt.close();
+				con.close();
+			}
+			catch(Exception e)
+			{
+				System.out.println(e);
+			}
+		}
+	}
 }
 
 
@@ -189,7 +234,7 @@ class Admin implements employee
 
 	@Override
 	public void modifyGuest() {
-		
+		System.out.println("method under construction");
 		
 	}
 
@@ -202,13 +247,12 @@ class Admin implements employee
 	@Override
 	public void addEmployee() {
 		
-		
+		con.addEmployee();
 	}
 
 	@Override
 	public void removeEmployee() {
-		
-		
+		System.out.println("method under construction");
 	}
 	
 }
