@@ -39,7 +39,3 @@ jobs:
   
       env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
-<<<<<<< HEAD
-=======
-      run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
->>>>>>> main
