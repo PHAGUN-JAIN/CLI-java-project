@@ -12,10 +12,10 @@ the main aim of this project was to::
 ## Challenges faced
 
 there were a lot of minor issues out of those few are worth mentioning
-- comparing 2 strings
+- comparing 2 strings<br>
     there was a requirement to match two string i.e one in DB and one provided by the user at the point i was using (==) but later i realised that it is useful to compare if the reference variable is pointing to a same object or not to compare the actual value i had to use (String.equals() method)
 - difference between execut(), executeUpdate(), executeQuery()
-- database locked exception
+- database locked exception <br>
     in early implementation i was holding the db connection even after login fuction is complete it took about 2 hrs to figure out that then i restructured the implementation, so that it releases the DB after function completes
 
 ## Objectives achieved
