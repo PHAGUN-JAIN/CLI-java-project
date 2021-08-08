@@ -1,8 +1,21 @@
 # PROJECT OVERVIEW
 
+it is a solo project build during holidays for practising object oriented programming.
+
 ## Tech Used
+
 - Java
 - Sqlite3
+
+## What does it do ?
+
+this project is a basic CLI based hotel management java application, it provides basic functionalities like:
+- checking if the user is a admin or not
+- providing with a menu to user to :
+    - add a user to access the app
+    - show list of guest
+    - check in a new guest
+    - check out a guest
 
 ## Aim of the Project
 the main aim of this project was to::
