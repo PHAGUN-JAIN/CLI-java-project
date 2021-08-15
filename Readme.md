@@ -38,6 +38,8 @@ during the duration of this project i was able to:
 - implement interface, and use a class for implementing the interface method.
 - use sqlite3 as a database for storing and accessing data
 
+- did tried containerization of this app(since this app depends on external dependency i.e. sqlite3 i have to look into how to make two containers communicate for functionong of this app in containerized format)
+
 ## Any extension to this ??
 I thought of implementing a CI/CD pipline to publish a package on github registry, couldn't do that yet 
 looking for some help on how to setup github actions and maven
